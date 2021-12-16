@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SokoBan
 {
-    class GameObject
+    abstract class GameObject
     {
         int x, y;
         char visualization;
