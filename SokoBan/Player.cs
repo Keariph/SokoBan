@@ -4,7 +4,10 @@ using System.Text;
 
 namespace SokoBan
 {
-    class Player
+    public class Player : GameObject
     {
+        public Player(int x, int y) : base(x, y)
+        {
+        } 
     }
 }
