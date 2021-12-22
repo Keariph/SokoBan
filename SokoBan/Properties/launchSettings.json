@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SokoBan": {
+      "commandName": "Project",
+      "commandLineArgs": "D:\\Программирование\\Kontur\\SokoBan\\Levels"
+    }
+  }
+}

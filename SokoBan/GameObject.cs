@@ -14,17 +14,17 @@ namespace SokoBan
             Y = y;
         }
 
-        public void MoveTo(Direction direction, int x, int y)
+
+        public Tuple<int, int> MoveTo(ConsoleKeyInfo key)
         {
-            switch (direction)
+            switch (key.Key)
             {
-                case Direction.Up:  y++; break;
-                case Direction.Down: y--; break;
-                case Direction.Left: x--; break;
-                case Direction.Right: x++; break;
+                case ConsoleKey.UpArrow: return Tuple.Create(X, Y++);
+                case ConsoleKey.DownArrow: return Tuple.Create(X, Y--);
+                case ConsoleKey.LeftArrow: return Tuple.Create(X--, Y);
+                case ConsoleKey.RightArrow: return Tuple.Create(X++, Y);
+                default: return Tuple.Create(X, Y);
             }
         }
     }
-
-    public enum Direction { Left, Up, Right, Down };
 }
