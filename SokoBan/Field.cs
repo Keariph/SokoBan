@@ -79,14 +79,18 @@ namespace SokoBan
                         }
                         else
                         {
-                            Console.CursorLeft = startX;
-                            Console.CursorTop = startY;
-                            map[startY][startX] = "0";
-                            Console.Write(' ');
-                            Console.CursorLeft = player.X;
-                            Console.CursorTop = player.Y;
-                            map[player.Y][player.X] = "2";
-                            Console.Write('x');
+                            if (IsStandOnPlace(startX, startY))
+                            {
+                                map[startY][startX] = "4";
+                                map[player.Y][player.X] = "2";
+                                DrawMovement(startX, startY, x, y, '*', 'x');
+                            }
+                            else
+                            {
+                                map[startY][startX] = "0";
+                                map[player.Y][player.X] = "2";
+                                DrawMovement(startX, startY, x, y, ' ', 'x');
+                            }
                         }
                     }                   
                 }
@@ -108,30 +112,43 @@ namespace SokoBan
             {
                 boxes[i].Y = startY;
                 boxes[i].X = startX;
-                Console.CursorLeft = boxes[i].X;
-                Console.CursorTop = boxes[i].Y;
-                Console.Write('#');
                 return false;
             }
             else
             {
-                if(map[y][x] == "4")
+                if (IsStandOnPlace(startX, startY))
                 {
-                    ClosePlace(x, y);
+                    map[startY][startX] = "4";
+                    SetStatusPlace(x, y, true);
+                    map[boxes[i].Y][boxes[i].X] = "3";
+                    DrawMovement(startX, startY, x, y, '*', '=');
                 }
-                Console.CursorLeft = startX;
-                Console.CursorTop = startY;
-                map[startY][startX] = "0";
-                Console.Write(' ');
-                Console.CursorLeft = boxes[i].X;
-                Console.CursorTop = boxes[i].Y;
-                map[boxes[i].Y][boxes[i].X] = "3";
-                Console.Write('#');   
+                if (map[y][x] == "4")
+                {
+                    SetStatusPlace(x,y,false);
+                    map[startY][startX] = "0";
+                    map[boxes[i].Y][boxes[i].X] = "3";
+                    DrawMovement(startX, startY, x, y, ' ', '=');
+                }
+                if(map[y][x] == "0")
+                {
+                    map[startY][startX] = "0";
+                    map[boxes[i].Y][boxes[i].X] = "3";
+                    DrawMovement(startX, startY, x, y, ' ', '#');
+                }
                 return true;
-            }
-            
+            }      
         }
 
+        public void DrawMovement(int startX, int startY, int x, int y, char firstChar, char secondChar)
+        {
+            Console.CursorLeft = startX;
+            Console.CursorTop = startY;
+            Console.Write(firstChar);
+            Console.CursorLeft = x;
+            Console.CursorTop = y;
+            Console.Write(secondChar);
+        }
 
         public int FindBox(int x, int y)
         {
@@ -143,12 +160,12 @@ namespace SokoBan
             return -1;
         }
 
-        public void ClosePlace(int x, int y)
+        public void SetStatusPlace(int x, int y, bool status)
         {
             for (int i = 0; i < plases.Count; i++)
             {
                 if (plases[i].X == x && plases[i].Y == y)
-                    plases[i].IsOpen = false;
+                    plases[i].IsOpen = status;
             }
         }
 
@@ -167,6 +184,16 @@ namespace SokoBan
                 return true;
             }
             else return false;
+        }
+
+        public bool IsStandOnPlace(int x, int y)
+        {
+            for (int i = 0; i < plases.Count; i++)
+            {
+                if (plases[i].X == x && plases[i].Y == y)
+                    return true;
+            }
+            return false;
         }
     }
 }

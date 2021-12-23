@@ -10,57 +10,42 @@ namespace SokoBan
         public static List<List<string>> map;
         public static Field field;
         public static Player player;
+
+
         static void Main()
         {
             Console.CursorVisible = false;
             string levelPath = path;
             int countLevels = Directory.GetFiles(path, "*", SearchOption.TopDirectoryOnly).Length;
-            int choose;
+            int choice = 0;
             while (true)
             {
-                choose = 0;
-                while (choose == 0)
+                choice = SelectMainMenu(countLevels);
+                if (choice != -1)
                 {
-                    Console.Clear();
-                    Console.WriteLine("1. New game\n2. Choose level\n3. Exit");
-                    switch (Console.ReadLine())
+                    for (int i = choice; i <= countLevels; i++)
                     {
-                        case "1": choose = 1; break;
-                        case "2":
-                            for (int i = 1; i <= countLevels; i++)
-                            {
-                                Console.WriteLine(i + ". Level " + i);
-                            }
-                            choose = Convert.ToInt32(Console.ReadLine());
+                        Console.Clear();
+                        levelPath = path + "\\Level " + i + ".txt";
+                        ReadMap(levelPath);
+                        CreateField();
+                        field.WriteMap();
+                        field.MovePlayer();
+                        Console.Clear();
+                        Console.WriteLine("1. Back to menu\n2. Next level");
+                        if(Console.ReadLine() == "1")
+                        {
                             break;
-                        case "3": return;
-                        case null:
-                            Console.WriteLine("Invalid input");
-                            break;
+                        }
                     }
                 }
-                for (int i = choose; i <= countLevels; i++)
-                {
-                    Console.Clear();
-                    levelPath = path + "\\Level " + i + ".txt";
-                    ReadMap(levelPath);
-                    CreateField();
-                    field.WriteMap();
-                    field.MovePlayer();
-                    Console.Clear();
-                    Console.WriteLine("1. Back to menu\n2. Next level");
-                    switch (Console.ReadLine())
-                    {
-                        case "1": break;
-                        case "2": continue;
-                        case null:
-                            Console.WriteLine("Invalid input");
-                            break;
-                    }
-                }
+                else return;
             }
         }
 
+        /**
+         * 
+         */
         static void ReadMap(string path)
         {
             string stringMap = File.ReadAllText(path);
@@ -95,9 +80,29 @@ namespace SokoBan
             field = new Field(player, boxes, plases, map);
         }
 
-        public void OpenMenu()
+        public static int SelectMainMenu(int countLevels)
         {
-            
+            int choice = 0;
+            while (choice == 0)
+            {
+                Console.Clear();
+                Console.WriteLine("1. New game\n2. Choice level\n3. Exit");
+                switch (Console.ReadLine())
+                {
+                    case "1": return 1;
+                    case "2":
+                        for (int i = 1; i <= countLevels; i++)
+                        {
+                            Console.WriteLine(i + ". Level " + i);
+                        }
+                        return Convert.ToInt32(Console.ReadLine());
+                    case "3": return -1;
+                    case null:
+                        Console.WriteLine("Invalid input");
+                        break;
+                }
+            }
+            return -1;
         }
     }
 }
