@@ -15,15 +15,14 @@ namespace SokoBan
         }
 
 
-        public Tuple<int, int> MoveTo(ConsoleKeyInfo key)
+        public void MoveTo(ConsoleKeyInfo key)
         {
             switch (key.Key)
             {
-                case ConsoleKey.UpArrow: return Tuple.Create(X, Y++);
-                case ConsoleKey.DownArrow: return Tuple.Create(X, Y--);
-                case ConsoleKey.LeftArrow: return Tuple.Create(X--, Y);
-                case ConsoleKey.RightArrow: return Tuple.Create(X++, Y);
-                default: return Tuple.Create(X, Y);
+                case ConsoleKey.UpArrow: Y--; break;
+                case ConsoleKey.DownArrow: Y++; break;
+                case ConsoleKey.LeftArrow: X--; break;
+                case ConsoleKey.RightArrow: X++; break;
             }
         }
     }
